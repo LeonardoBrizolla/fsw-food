@@ -3,7 +3,7 @@ import { ChevronRightIcon } from "lucide-react";
 
 import { Header } from "./_components/header";
 import { Button } from "./_components/ui/button";
-import { Search } from "./_components/search-input";
+import { Search } from "./_components/search";
 import { ProductList } from "./_components/product-list";
 import { PromoBanner } from "./_components/promo-banner";
 import { CategoryList } from "./_components/category-list";
