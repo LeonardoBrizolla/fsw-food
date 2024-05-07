@@ -1,9 +1,14 @@
 import { Header } from "@/app/_components/header";
 import { RestaurantItem } from "@/app/_components/restaurant-item";
 import { db } from "@/app/_lib/prisma";
+import { notFound } from "next/navigation";
 
 export default async function RecommendedRestaurants() {
   const restaurants = await db.restaurant.findMany({});
+
+  if (!restaurants) {
+    return notFound();
+  }
 
   return (
     <>
