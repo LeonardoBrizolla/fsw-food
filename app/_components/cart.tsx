@@ -45,7 +45,9 @@ const Cart = () => {
                   {Number(products?.[0].restaurant.deliveryFee) === 0 ? (
                     <span className="uppercase text-primary">Grátis</span>
                   ) : (
-                    formatCurrency(Number(products?.[0].restaurant.deliveryFee))
+                    formatCurrency(
+                      Number(products?.[0]?.restaurant?.deliveryFee),
+                    )
                   )}
                 </div>
 
