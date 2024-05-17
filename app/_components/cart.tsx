@@ -50,6 +50,14 @@ const Cart = () => {
         user: {
           connect: { id: data.user.id },
         },
+        orderProducts: {
+          createMany: {
+            data: products.map((product) => ({
+              productId: product.id,
+              quantity: product.quantity,
+            })),
+          },
+        },
       });
 
       clearCart();
