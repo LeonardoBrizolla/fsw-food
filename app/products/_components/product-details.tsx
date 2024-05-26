@@ -170,7 +170,7 @@ export function ProductDetails({
             <SheetTitle className="text-left">Sacola</SheetTitle>
           </SheetHeader>
 
-          <Cart />
+          <Cart setIsOpen={setIsCartOpen} />
         </SheetContent>
       </Sheet>
 
