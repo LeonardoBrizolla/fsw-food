@@ -5,9 +5,12 @@ import { Avatar, AvatarImage } from "@/app/_components/ui/avatar";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
+import { CartContext } from "@/app/_context/cart";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
 interface OrderItemProps {
   order: Prisma.OrderGetPayload<{
@@ -22,20 +25,35 @@ interface OrderItemProps {
   }>;
 }
 
+const getOrderStatusLabel = (status: OrderStatus) => {
+  switch (status) {
+    case "CANCELLED":
+      return "Cancelado";
+    case "PREPARING":
+      return "Preparando";
+    case "CONFIRMED":
+      return "Confirmado";
+    case "DELIVERING":
+      return "Em transporte";
+    case "COMPLETED":
+      return "Finalizado";
+  }
+};
+
 const OrderItem = ({ order }: OrderItemProps) => {
-  const getOrderStatusLabel = (status: OrderStatus) => {
-    switch (status) {
-      case "CANCELLED":
-        return "Cancelado";
-      case "PREPARING":
-        return "Preparando";
-      case "CONFIRMED":
-        return "Confirmado";
-      case "DELIVERING":
-        return "Em transporte";
-      case "COMPLETED":
-        return "Finalizado";
+  const { addProductToCart } = useContext(CartContext);
+
+  const router = useRouter();
+
+  const handleReDoOrderClick = () => {
+    for (const orderProduct of order.orderProducts) {
+      addProductToCart({
+        product: { ...orderProduct.product, restaurant: order.restaurant },
+        quantity: orderProduct.quantity,
+      });
     }
+
+    router.push(`/restaurants/${order.restaurantId}`);
   };
 
   const isOrderStatusNotCompleted = order?.status !== "COMPLETED";
@@ -112,6 +130,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
             variant="ghost"
             className="text-xs text-primary"
             disabled={isOrderStatusNotCompleted}
+            onClick={handleReDoOrderClick}
           >
             Refazer pedido
           </Button>
